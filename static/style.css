@@ -1,0 +1,25 @@
+.sim-container {
+    position: relative;
+    height: 200px;
+    background: #222;
+    border-radius: 10px;
+    padding-top: 40px;
+}
+
+.car {
+    width: 80px;
+    height: 40px;
+    background: red;
+    margin: 0 auto;
+    border-radius: 10px;
+    transition: opacity 0.5s ease;
+}
+
+.barrier {
+    width: 120px;
+    height: 10px;
+    background: yellow;
+    margin: 20px auto;
+    transform-origin: left;
+    transition: transform 0.5s ease;
+}

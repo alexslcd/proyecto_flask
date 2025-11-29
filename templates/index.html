@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Parking Automático</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="bg-dark text-white">
+
+<div class="container py-4">
+    <h1 class="text-center mb-4">🚗 Parking Automático Inteligente</h1>
+
+    <!-- Estado actual -->
+    <div class="card text-center">
+        <div class="card-body">
+            <h3>Estado del Estacionamiento:</h3>
+            <h1 id="estado" class="display-3">Cargando...</h1>
+        </div>
+    </div>
+
+    <!-- Controles -->
+    <div class="text-center mt-4">
+        <button class="btn btn-success btn-lg me-3" onclick="enviarControl('start')">Activar</button>
+        <button class="btn btn-danger btn-lg" onclick="enviarControl('stop')">Detener</button>
+    </div>
+
+    <!-- Simulación -->
+    <div class="sim-container mt-5 text-center">
+        <div class="car" id="car"></div>
+        <div class="barrier" id="barrier"></div>
+    </div>
+
+</div>
+
+
+<script>
+function actualizarEstado() {
+    fetch("/estado")
+        .then(r => r.json())
+        .then(data => {
+            const estado = document.getElementById("estado");
+            const car = document.getElementById("car");
+            const barrier = document.getElementById("barrier");
+
+            if (data.estado === 0) {
+                estado.innerHTML = "🔥 OCUPADO";
+                estado.className = "display-3 text-danger";
+                car.style.opacity = 1;
+                barrier.style.transform = "rotate(90deg)";
+            } else {
+                estado.innerHTML = "🟢 LIBRE";
+                estado.className = "display-3 text-success";
+                car.style.opacity = 0;
+                barrier.style.transform = "rotate(0deg)";
+            }
+        });
+}
+
+setInterval(actualizarEstado, 1000);
+
+function enviarControl(accion) {
+    fetch("/control", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({accion})
+    });
+}
+</script>
+
+</body>
+</html>
